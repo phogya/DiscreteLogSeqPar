@@ -1,3 +1,13 @@
+/**
+ * Class Wrapper runs the DiscreteLogSeq and DiscreteLogPar programs together
+ * to compare their runtimes. It also allows for DiscreteLogPar to be run from
+ * a jar file rather than from the command line
+ * 
+ * Usage: Wrapper <p> <a> <b>
+ * 
+ * @author  Peter Hogya
+ * @version 06-Aug-2018
+ */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -6,6 +16,11 @@ import java.math.BigInteger;
 
 public class Wrapper {
 
+	/**
+	 * Main function
+	 * 
+	 * @param args
+	 */
     public static void main(String[] args) {
     	
     	// Command line arguments
@@ -68,7 +83,13 @@ public class Wrapper {
         }
     }
 
-    private static void printLines(String cmd, InputStream ins) throws Exception {
+    /**
+     * Prints lines from the given InputStream
+     * 
+     * @param ins	The InputStream
+     * @throws Exception
+     */
+    private static void printLines(InputStream ins) throws Exception {
     	
         String line = null;
         BufferedReader in = new BufferedReader (
@@ -76,22 +97,32 @@ public class Wrapper {
         while ((line = in.readLine()) != null) {
             System.out.println(line);
         }
-      }
+    }
 
-      private static void runProcess(String command, File file, char Mode) throws Exception {
-    	  
-        Process pro = Runtime.getRuntime().exec(command, null, file);
+    /**
+     * Runs the process handed to it from main
+     * 
+     * @param command	The command to run
+     * @param file		The directory from which to run the command
+     * @param Mode		Whether or not to print the output
+     * @throws Exception
+     */
+    private static void runProcess(String command, File file, char Mode) throws Exception {
+    	
+    	Process pro = Runtime.getRuntime().exec(command, null, file);
+    	
+    	// 'p' is print mode
         if( Mode == 'p' ) {
-        	printLines(command + " stdout:", pro.getInputStream());
-            printLines(command + " stderr:", pro.getErrorStream());
+        	printLines(pro.getInputStream());
+            printLines(pro.getErrorStream());
         }
-      }
+    }
       
-      /**
+    /**
   	* Prints a usage message and exits.
   	*/
   	private static void usage() {
-  		System.err.println ("Usage: java -jar DL.jar <p> <a> <b>");
+  		System.err.println ("Usage: Wrapper <p> <a> <b>");
   		System.exit(1);
   	}
 }
